@@ -30,7 +30,7 @@ rcParams["axes.unicode_minus"] = False
 #   - OISST v2.1 (AVHRR) anomaly 포함
 #   - 이 인스턴스는 현재 2024-12-31까지 제공됨
 # -------------------------------------------------
-ERDDAP_URL = "https://apdrc.soest.hawaii.edu/erddap/griddap/hawaii_soest_330b_094e_ca45"
+ERDDAP_URL = "https://erddap.aoml.noaa.gov/hdb/erddap/griddap/SST_OI_DAILY_1981_PRESENT_T"
 
 def _open_ds(url_base: str):
     """서버 설정에 따라 .nc 필요할 수 있어 두 번 시도 (동일 엔드포인트 고정)."""
@@ -310,15 +310,16 @@ st.markdown("""
 # 📚 참고자료
 # -----------------------------
 st.markdown("---")
-st.header("📚 참고자료")
 
 st.markdown("""
-- **데이터 출처**
-    - [NOAA/NCEI OISST v2.1 Daily High Resolution Dataset (ERDDAP, SOEST)](https://apdrc.soest.hawaii.edu/erddap/griddap/hawaii_soest_330b_094e_ca45.html)
-    - [NOAA National Centers for Environmental Information (NCEI) OISST 설명 페이지](https://www.ncei.noaa.gov/products/optimum-interpolation-sst)
-- **참고문헌**
-    - 그레타 퉁베리, 《기후 책》, 이순희 역, 기후변화행동연구소 감수, 열린책들, 2023.  
-      ([Yes24 도서 정보 링크](https://www.yes24.com/product/goods/119700330))
+### 📚 참고문헌
+
+- NOAA National Centers for Environmental Information. (2019). *Optimum interpolation sea surface temperature (OISST) v2.1 daily high resolution dataset* [Data set]. NOAA National Centers for Environmental Information. https://www.ncei.noaa.gov/products/optimum-interpolation-sst  
+
+- NOAA Atlantic Oceanographic and Meteorological Laboratory (AOML). (2025). *ERDDAP server: SST_OI_DAILY_1981_PRESENT_T (OISST v2.1, daily, 1981–present)* [Data set]. NOAA AOML. https://erddap.aoml.noaa.gov/hdb/erddap/info/SST_OI_DAILY_1981_PRESENT_T/index.html  
+
+- 그레타 툰베리, 《기후 책》, 이순희 역, 기후변화행동연구소 감수, 열린책들, 2023.  
+    ([Yes24 도서 정보 링크](https://www.yes24.com/product/goods/119700330))
 """)
 
 

@@ -165,7 +165,15 @@ with st.spinner("사용 가능한 날짜 불러오는 중..."):
     times = list_available_times()
 tmin, tmax = times.min().date(), times.max().date()
 
-default_date = min(max(times[-1] - pd.Timedelta(days=7), times[0]), times[-1])
+# ✅ 기본 시작일 = 2024-08-15 (커버리지 범위 바깥이면 자동 조정)
+DEFAULT_START = pd.Timestamp("2024-08-15")
+if DEFAULT_START.date() < tmin:
+    default_date = times[0]
+elif DEFAULT_START.date() > tmax:
+    default_date = times[-1]
+else:
+    default_date = DEFAULT_START
+
 date = st.sidebar.date_input(
     "날짜 선택",
     value=default_date.date(),
@@ -246,4 +254,83 @@ st.download_button(
     data=csv_bytes,
     file_name=f"oisst_anom_{actual_date}_{preset}_{proj_name}.csv",
     mime="text/csv",
+)
+
+# -----------------------------
+# 📘 데이터 탐구 보고서 (학생용)
+# -----------------------------
+st.markdown("---")
+st.header("📘 데이터 탐구 보고서: 우리 모둠의 발견")
+
+st.subheader("1. 대한민국 주변 바다가 보여준 이상 신호")
+st.markdown("""
+2024년 8월 15일 기준 해수면 온도 편차 지도를 보면, 대한민국 주변 바다가 
+세계적으로도 뚜렷한 **수온 상승의 핫스팟**으로 나타났습니다.  
+동중국해, 대한해협, 동해 남부 해역 일대가 기준치보다 훨씬 높은 온도를 기록하며 
+빨간색 영역으로 두드러졌습니다.  
+이것은 우리 생활권과 직접 연결된 바다가 기후 위기의 최전선에 놓여 있음을 의미합니다.
+""")
+
+st.subheader("2. 해수온도 상승의 주요 원인")
+st.markdown("""
+첫째, **온실가스 배출 증가**로 인한 지구 온난화가 바다에 축적된 열을 키우고 있습니다.  
+바다는 대기에서 발생한 초과 에너지의 90% 이상을 흡수하기 때문에, 
+인간이 배출한 이산화탄소와 메탄이 결국 바다 온도를 밀어올리고 있습니다.  
+
+둘째, **북태평양 해류와 대기 순환의 변화**가 한국 인근 해역을 특히 민감하게 만들었습니다.  
+적도 부근에서 발생한 해양 열파(마린 히트웨이브)가 북상하면서 
+한반도 주변 바다에 강한 온도 이상을 일으킨 것입니다.
+""")
+
+st.subheader("3. 해수온도 상승이 불러온 영향")
+st.markdown("""
+해수면 온도의 급격한 상승은 단순히 바닷물이 따뜻해지는 현상에 그치지 않습니다.  
+
+- **어장 붕괴와 어종 이동**: 명태, 오징어 같은 냉수성 어종은 급격히 줄고, 
+  대신 열대성 어종이 나타나며 어업 구조 자체가 변하고 있습니다.  
+
+- **태풍의 위력 강화**: 따뜻한 바다는 태풍의 에너지원이 되기 때문에, 
+  여름철 한반도를 향하는 태풍은 더욱 강력해지고 그 피해 규모도 커지고 있습니다.  
+
+- **집중호우와 참사**: 바다에서 증발한 수증기가 많아질수록 
+  대기 중 수분이 과도하게 축적되어 집중호우를 일으킵니다.  
+  최근 우리나라에서 발생한 도시 침수, 산사태 같은 참사는 
+  해수온도 상승과 무관하지 않으며, 이는 기후 위기가 
+  인명 피해와 사회적 재난으로 직결되고 있음을 보여줍니다.  
+
+- **연안 생태계 교란**: 해양 산성화와 함께, 산호 군락이나 해조류 숲 같은 
+  연안 생태계가 무너지고 이는 다시 해양 생물 다양성 감소로 이어집니다.  
+
+이러한 변화는 곧 우리의 식량, 안전, 지역 사회의 경제와 직결된다는 점에서 
+단순히 환경 문제가 아닌 **생존의 문제**라고 할 수 있습니다.
+""")
+
+
+# -----------------------------
+# 📚 참고자료
+# -----------------------------
+st.markdown("---")
+st.header("📚 참고자료")
+
+st.markdown("""
+- **데이터 출처**
+    - [NOAA/NCEI OISST v2.1 Daily High Resolution Dataset (ERDDAP, SOEST)](https://apdrc.soest.hawaii.edu/erddap/griddap/hawaii_soest_330b_094e_ca45.html)
+    - [NOAA National Centers for Environmental Information (NCEI) OISST 설명 페이지](https://www.ncei.noaa.gov/products/optimum-interpolation-sst)
+- **참고문헌**
+    - 그레타 퉁베리, 《기후 책》, 이순희 역, 기후변화행동연구소 감수, 열린책들, 2023.  
+      ([Yes24 도서 정보 링크](https://www.yes24.com/product/goods/119700330))
+""")
+
+
+
+# -----------------------------
+# Footer (팀명)
+# -----------------------------
+st.markdown(
+    """
+    <div style='text-align: center; padding: 20px; color: gray; font-size: 0.9em;'>
+        미림마이스터고 1학년 4반 3조 · 너무뜨거운바다조
+    </div>
+    """,
+    unsafe_allow_html=True
 )

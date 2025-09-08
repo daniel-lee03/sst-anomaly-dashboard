@@ -246,15 +246,24 @@ c3.metric("최소 편차 (°C)", f"{np.nanmin(da.values):+.2f}")
 with st.expander("픽셀 데이터(샘플) 보기"):
     sample = da.coarsen(lat=4, lon=4, boundary="trim").mean()
     df_sample = sample.to_dataframe(name="anom(°C)").reset_index()
+    # 🔑 NaN 값 제거
+    df_sample = df_sample.dropna(subset=["anom(°C)"])
     st.dataframe(df_sample.head(200), use_container_width=True)
 
-csv_bytes = da.to_dataframe(name="anom(°C)").reset_index().to_csv(index=False).encode("utf-8-sig")
-st.download_button(
-    "📥 현재 지도 데이터(CSV) 내려받기",
-    data=csv_bytes,
-    file_name=f"oisst_anom_{actual_date}_{preset}_{proj_name}.csv",
-    mime="text/csv",
-)
+# 🔑 CSV도 NaN 제거
+df_csv = da.to_dataframe(name="anom(°C)").reset_index()
+df_csv = df_csv.dropna(subset=["anom(°C)"])
+
+if df_csv.empty:
+    st.warning("이 날짜/영역에는 유효한 anomaly 값이 없어 CSV가 비어 있습니다.")
+else:
+    csv_bytes = df_csv.to_csv(index=False).encode("utf-8-sig")
+    st.download_button(
+        "📥 현재 지도 데이터(CSV) 내려받기",
+        data=csv_bytes,
+        file_name=f"oisst_anom_{actual_date}_{preset}_{proj_name}.csv",
+        mime="text/csv",
+    )
 
 # -----------------------------
 # 📘 데이터 탐구 보고서 (학생용)
